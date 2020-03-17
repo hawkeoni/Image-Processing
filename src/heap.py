@@ -1,21 +1,21 @@
-from typing import Tuple, Any, List
+"""
+A heap implementation for no reason at all.
+Yes, I do know that heapq exists.
+Sometimes a man just needs to go wild and write his own heap.
+"""
+
+
+from typing import Tuple, Any
 
 
 class Heap:
     """Maxheap with keys and objects"""
 
-    def __init__(self, lst: List[Tuple[Any, Any]] = None):
+    def __init__(self, limit: int = None):
         self.heap_keys = []
         self.heap_objs = []
         self.heapsize = 0
-        if lst is not None:
-            self.build_from_list(lst)
-
-    def build_from_list(self, lst: List[Tuple[Any, Any]]):
-        self.heap_keys, self.heap_objs = zip(*lst)
-        self.heapsize = len(lst)
-        for i in range(self.heapsize // 2):
-            self.heapify(i)
+        self.limit = limit or float('inf')
 
     def insert(self, el: Tuple[float, Any]):
         self.heapsize += 1
@@ -33,6 +33,9 @@ class Heap:
                 self.heap_objs[idx],
             )
             idx = (idx - 1) // 2
+        if self.heapsize > self.limit:
+            self.heap_keys.pop()
+            self.heap_objs.pop()
 
     def heapify(self, i: int):
         if i >= self.heapsize:
@@ -56,6 +59,7 @@ class Heap:
     def pop(self) -> Tuple[Any, Any]:
         if self.heapsize == 0:
             raise BaseException("Pop from emptyheap!")
+        self.heapsize -= 1
         retkey, retobj = self.heap_keys[0], self.heap_objs[0]
         self.heap_keys[0] = self.heap_keys[-1]
         self.heap_objs[0] = self.heap_objs[-1]
