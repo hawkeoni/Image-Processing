@@ -57,9 +57,30 @@ def num_combinations(n: int, k: int):
     return factorial(n) // factorial(n - k) // factorial(k)
 
 
-def point_to_line_distance(p1: np.ndarray, p2: np.ndarray, p3: np.ndarray) -> float:
-    """Calculate distance from point p3 to line between p1 and p2."""
-    return np.linalg.norm(np.cross(p2 - p1, p1 - p3)) / np.linalg.norm(p2 - p1)
+def point_to_segment_distance(p1: np.ndarray, p2: np.ndarray, p3: np.ndarray) -> float:
+    """Calculate distance from point p3 to segment between p1 and p2."""
+    pi = 3.14
+    if all(p1 == p3) or all(p2 == p3):
+        return 0
+    if (
+        np.arccos(
+            np.dot(
+                (p3 - p1) / np.linalg.norm(p3 - p1), (p2 - p1) / np.linalg.norm(p2 - p1)
+            )
+        )
+        > pi / 2
+    ):
+        return np.linalg.norm(p3 - p1)
+    if (
+        np.arccos(
+            np.dot(
+                (p3 - p2) / np.linalg.norm(p3 - p2), (p1 - p2) / np.linalg.norm(p1 - p2)
+            )
+        )
+        > pi / 2
+    ):
+        return np.linalg.norm(p3 - p2)
+    return np.linalg.norm(np.cross(p1 - p2, p1 - p3)) / np.linalg.norm(p2 - p1)
 
 
 def get_sides_from_rectangle(rectangle: np.ndarray) -> List[Tuple[np.ndarray]]:

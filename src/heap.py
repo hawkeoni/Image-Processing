@@ -15,7 +15,7 @@ class Heap:
         self.heap_keys = []
         self.heap_objs = []
         self.heapsize = 0
-        self.limit = limit or float('inf')
+        self.limit = limit or float("inf")
 
     def insert(self, el: Tuple[float, Any]):
         self.heapsize += 1

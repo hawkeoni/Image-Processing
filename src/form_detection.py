@@ -12,9 +12,9 @@ from skimage.feature import corner_harris, corner_peaks
 from src.utils import (
     get_angle_cos,
     num_combinations,
-    point_to_line_distance,
+    point_to_segment_distance,
     segment_intersect,
-    get_sides_from_rectangle
+    get_sides_from_rectangle,
 )
 from src.heap import Heap
 
@@ -23,7 +23,7 @@ def get_boundaries_and_corners(cutout: np.ndarray) -> Tuple[np.ndarray, np.ndarr
     """Gets dots creating boundaries and possible corners from Harris algorithm."""
     boundaries = segmentation.boundaries.find_boundaries(cutout)
     corners = corner_peaks(
-        corner_harris(boundaries, k=0.01), min_distance=20, num_peaks=50
+        corner_harris(boundaries, k=0.2), min_distance=20, num_peaks=50
     ).tolist()
     random.shuffle(corners)
     return boundaries, np.array(corners[:22])
@@ -74,7 +74,9 @@ def find_rectangle_candidates(
     return retlist
 
 
-def classify_points(rectangle: np.ndarray, boundary_points: np.ndarray, thr: float = 0.9):
+def classify_points(
+    rectangle: np.ndarray, boundary_points: np.ndarray, thr: float = 0.75
+):
     """Classifies boundary points into 4 sides of a rectangle."""
     sides = get_sides_from_rectangle(rectangle)
     unclassified_points = []
@@ -82,7 +84,9 @@ def classify_points(rectangle: np.ndarray, boundary_points: np.ndarray, thr: flo
     classes = []
     # classifying points based on closest side
     for point_idx, point in enumerate(boundary_points):
-        distances = np.array([point_to_line_distance(*side, point) for side in sides])
+        distances = np.array(
+            [point_to_segment_distance(*side, point) for side in sides]
+        )
         top1, top2 = distances.argsort()[:2]
         dist1, dist2 = distances[top1], distances[top2]
         if dist1 >= thr * dist2 and len(classes) > 5:
@@ -111,7 +115,7 @@ def get_object_description(
     mass_center: np.ndarray,
     cutout_shape: Tuple[int, int] = None,
     center_thr: int = None,
-    max_thr: int = None
+    max_thr: int = None,
 ) -> str:
     if center_thr is None and max_thr is None:
         assert cutout_shape is not None
@@ -125,10 +129,10 @@ def get_object_description(
         side_points = boundary_points[classes == side_cls]
         side_mass_center = np.mean(boundary_points[classes == side_cls], axis=0)
         intersection = segment_intersect(side_mass_center, mass_center, p1, p2)
-        center_distance = point_to_line_distance(p1, p2, side_mass_center)
+        center_distance = point_to_segment_distance(p1, p2, side_mass_center)
         side_points_distance = []
         for p in side_points:
-            side_points_distance.append(point_to_line_distance(p1, p2, p))
+            side_points_distance.append(point_to_segment_distance(p1, p2, p))
         most_distance = np.array(side_points_distance)
         most_distance.sort()
 
