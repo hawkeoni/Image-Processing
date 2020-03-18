@@ -39,7 +39,7 @@ def main(args):
         best_space = 0
         space_target = 0.8
         while best_space <= space_target * total_space:
-            boundaries, corners = get_boundaries_and_corners(cutout)
+            boundaries, corners = get_boundaries_and_corners(cutout, num_candidates=args.corner_candidates)
             space_target -= 0.05
             possible_rectangles = find_rectangle_candidates(
                 cutout, corners, candidate_limit=10
