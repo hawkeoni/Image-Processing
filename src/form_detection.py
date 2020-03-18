@@ -23,7 +23,7 @@ def get_boundaries_and_corners(cutout: np.ndarray) -> Tuple[np.ndarray, np.ndarr
     """Gets dots creating boundaries and possible corners from Harris algorithm."""
     boundaries = segmentation.boundaries.find_boundaries(cutout)
     corners = corner_peaks(
-        corner_harris(boundaries, k=0.2), min_distance=20, num_peaks=50
+        corner_harris(boundaries, k=0.2),min_distance=10, num_peaks=200
     ).tolist()
     random.shuffle(corners)
     return boundaries, np.array(corners[:22])

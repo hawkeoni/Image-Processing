@@ -4,7 +4,7 @@ import logging
 import numpy as np
 from skimage.morphology import convex_hull_image
 
-from src.utils import load_image, center_of_mass, get_cutout
+from src.utils import load_image, center_of_mass, get_cutout, draw_type
 from src.segmentation import SEGMENTATION_TECHNIQUES
 from src.form_detection import (
     find_rectangle_candidates,
@@ -35,12 +35,12 @@ def main(args):
         subimage = segmented_image == i
 
         cutout = get_cutout(subimage)
-        boundaries, corners = get_boundaries_and_corners(cutout)
         total_space = np.sum(cutout)
         best_space = 0
         space_target = 0.8
         while best_space <= space_target * total_space:
-            total_space -= 0.05
+            boundaries, corners = get_boundaries_and_corners(cutout)
+            space_target -= 0.05
             possible_rectangles = find_rectangle_candidates(
                 cutout, corners, candidate_limit=10
             )
@@ -61,11 +61,14 @@ def main(args):
             classes,
             center_of_mass(cutout),
             None,
-            center_thr=20,
+            center_thr=12,
             max_thr=75,
         )
         print(f"Figure_{i}'s code is {description}.")
         center = center_of_mass(subimage)
+        logging.info(f"Saving image to output.png")
+        draw_type(image, center, description)
+        image.save("output.png")
 
 
 if __name__ == "__main__":
@@ -74,6 +77,5 @@ if __name__ == "__main__":
     parser.add_argument(
         "--segmentation", type=str, required=True, help="Segmentation type."
     )
-    # parser.add_argument()
     args = parser.parse_args()
     main(args)

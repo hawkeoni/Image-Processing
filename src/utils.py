@@ -2,7 +2,7 @@ from typing import Tuple, List
 from math import factorial
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage
 
 
@@ -111,3 +111,10 @@ def segment_intersect(
         and _area(a, b, c) * _area(a, b, d) <= 0
         and _area(c, d, a) * _area(c, d, b) <= 0
     )
+
+
+def draw_type(image: Image, center: np.ndarray, text: str):
+    """Draws text on image."""
+    fnt = ImageFont.truetype('tnr.ttf', 50)
+    draw = ImageDraw.Draw(image)
+    draw.text(center[::-1], text, font=fnt)
