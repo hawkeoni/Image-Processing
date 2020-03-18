@@ -19,14 +19,14 @@ from src.utils import (
 from src.heap import Heap
 
 
-def get_boundaries_and_corners(cutout: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+def get_boundaries_and_corners(cutout: np.ndarray, num_candidates: int = 22) -> Tuple[np.ndarray, np.ndarray]:
     """Gets dots creating boundaries and possible corners from Harris algorithm."""
     boundaries = segmentation.boundaries.find_boundaries(cutout)
     corners = corner_peaks(
         corner_harris(boundaries, k=0.2),min_distance=10, num_peaks=200
     ).tolist()
     random.shuffle(corners)
-    return boundaries, np.array(corners[:22])
+    return boundaries, np.array(corners[:num_candidates])
 
 
 def find_best_angle_permutation(points: Tuple[np.array]) -> Tuple[float, np.array]:

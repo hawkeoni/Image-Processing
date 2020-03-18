@@ -50,7 +50,7 @@ def main(args):
                 zeros[p[0], p[1]] = 1
             best_space = np.sum(convex_hull_image(zeros))
             logging.info(
-                f"Current space is {best_space} which is {best_space / total_space} of total space."
+                f"Current space is {best_space} which is {best_space / total_space} of total space. "
                 f"Required space is {space_target}."
             )
         boundary_points = np.argwhere(boundaries == 1)
@@ -77,5 +77,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--segmentation", type=str, required=True, help="Segmentation type."
     )
+    parser.add_argument("--corner-candidates", type=int, help="Number of candidate corners for best rectangle "
+                                                              "approximation.")
     args = parser.parse_args()
     main(args)
