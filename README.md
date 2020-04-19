@@ -1,25 +1,6 @@
 # Обработка и распознавание изображений 2020
-Для запуска программы необходим python 3.7.0. Необходимо установить
-пакеты из requirements.txt:
-```bash
-pip install -r requirements.txt
-```
-Запуск программы осуществляется командой:
-```
-usage: main.py [-h] --input-file INPUT_FILE --segmentation SEGMENTATION
-               [--corner-candidates CORNER_CANDIDATES]
+Данный репозиторий содержит мои решения
+курса по обработке и распознаванию изображений ВМК МГУ от Л.М. Местецкого.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --input-file INPUT_FILE
-                        Input image.
-  --segmentation SEGMENTATION
-                        Segmentation type.
-  --corner-candidates CORNER_CANDIDATES
-                        Number of candidate corners for best rectangle
-                        approximation.
-```
-где:
-* --input-file - путь к изображениею
-* --segmentation - `motley` или `monochrome` в зависимости от входной картинки
-* --corner-candidates - число потенциальных углов для приближающего четырехугольника. Рекомендуется 33.
+Код лабораторных работ лежит в соответствующих папках, в README
+каждой из них есть инструкция к запуску и ссылка на отчет и входные данные.
