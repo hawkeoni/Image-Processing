@@ -48,7 +48,7 @@ def main(args):
             zeros = np.zeros_like(cutout)
             for p in best_rectangle:
                 zeros[p[0], p[1]] = 1
-            best_space = np.sum(convex_hull_image(zeros))
+            best_space = np.sum(convex_hull_image(zeros) * cutout)
             logging.info(
                 f"Current space is {best_space} which is {best_space / total_space} of total space. "
                 f"Required space is {space_target}."
