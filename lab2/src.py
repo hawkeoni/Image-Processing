@@ -52,14 +52,18 @@ def get_tips_and_valleys(
     defects = cv2.convexityDefects(contour, hull).reshape(-1, 4)
     contour = contour.reshape(-1, 2)
     tips, valleys = [], []
-    for start, end, farpoint, distance in defects:
-        if distance > 3000:
-            tips.append(contour[start])
-            valleys.append(contour[farpoint])
+    mindistance = 3000
+    while len(tips) < 5 and mindistance > 0:
+        tips, valleys = [], []
+        for start, end, farpoint, distance in defects:
+            if distance > 3000:
+                tips.append(contour[start])
+                valleys.append(contour[farpoint])
+        mindistance -= 300
     tips, valleys = np.array(tips), np.array(valleys)
+
     if tips.shape[0] < 5:
-        tips = np.array(contour[sp] for sp, _, _, _ in defects)
-        valleys = np.array(contour[fp] for _, _, fp, _ in defects)
+        raise Exception("Failed to find 5 tip candidates.")
     # find the best tips
     tips_center = np.mean(tips, axis=0)
     tips_to_center = tips - tips_center
@@ -95,4 +99,4 @@ def save_image(source: np.ndarray, dots: List[Tuple[int, int]], filename: str):
     ax.plot(*dots, "go")
     ax.plot(*dots, "green")
     plt.savefig(filename)
-    print("Successfully saved into ", filename)
+    print(f"Successfully saved into {filename}")
