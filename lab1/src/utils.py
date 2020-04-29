@@ -115,6 +115,6 @@ def segment_intersect(
 
 def draw_type(image: Image, center: np.ndarray, text: str):
     """Draws text on image."""
-    fnt = ImageFont.truetype('tnr.ttf', 50)
+    fnt = ImageFont.truetype("tnr.ttf", 50)
     draw = ImageDraw.Draw(image)
     draw.text(center[::-1], text, font=fnt)

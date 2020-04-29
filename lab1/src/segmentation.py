@@ -16,8 +16,12 @@ def motley_segmentation(image: Image) -> np.ndarray:
     image = np.array(image)
     grayscale = rgb2gray(image)
     grayscale_bin = binary_erosion(grayscale > 0.28, selem=np.ones((10, 10)))
-    grayscale_bin = remove_small_objects(grayscale_bin, min_size=image.shape[0] * image.shape[1] // 200)
-    grayscale_bin = remove_small_holes(grayscale_bin, image.shape[0] * image.shape[1] // 900)
+    grayscale_bin = remove_small_objects(
+        grayscale_bin, min_size=image.shape[0] * image.shape[1] // 200
+    )
+    grayscale_bin = remove_small_holes(
+        grayscale_bin, image.shape[0] * image.shape[1] // 900
+    )
     return label(grayscale_bin, background=0)
 
 

@@ -19,7 +19,9 @@ from src.utils import (
 from src.heap import Heap
 
 
-def get_boundaries_and_corners(cutout: np.ndarray, num_candidates: int = 22) -> Tuple[np.ndarray, np.ndarray]:
+def get_boundaries_and_corners(
+    cutout: np.ndarray, num_candidates: int = 22
+) -> Tuple[np.ndarray, np.ndarray]:
     """Gets dots creating boundaries and possible corners from Harris algorithm."""
     boundaries = segmentation.boundaries.find_boundaries(cutout)
     corners = corner_peaks(

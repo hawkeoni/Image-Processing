@@ -39,7 +39,9 @@ def main(args):
         best_space = 0
         space_target = 0.8
         while best_space <= space_target * total_space:
-            boundaries, corners = get_boundaries_and_corners(cutout, num_candidates=args.corner_candidates)
+            boundaries, corners = get_boundaries_and_corners(
+                cutout, num_candidates=args.corner_candidates
+            )
             space_target -= 0.05
             possible_rectangles = find_rectangle_candidates(
                 cutout, corners, candidate_limit=10
@@ -77,7 +79,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--segmentation", type=str, required=True, help="Segmentation type."
     )
-    parser.add_argument("--corner-candidates", type=int, help="Number of candidate corners for best rectangle "
-                                                              "approximation.")
+    parser.add_argument(
+        "--corner-candidates",
+        type=int,
+        help="Number of candidate corners for best rectangle " "approximation.",
+    )
     args = parser.parse_args()
     main(args)
