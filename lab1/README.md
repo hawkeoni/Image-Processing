@@ -30,7 +30,7 @@ optional arguments:
                         approximation.
 ```
 где:
-* --input-file - путь к изображениею
+* --input-file - путь к изображению
 * --segmentation - `motley` или `monochrome` в зависимости от входной картинки
 * --corner-candidates - число потенциальных углов для приближающего четырехугольника. Рекомендуется 33.
 Полученный результат сохраняется в output.png.
